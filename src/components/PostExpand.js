@@ -9,6 +9,8 @@ import axios from 'axios';
 function PostExpand(props) {
   const dispatch = useDispatch();
   const [newComment, setNewComment] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [error, setError] = useState(false);
 
   function onClose() {
     props.onClose();
@@ -27,7 +29,7 @@ function PostExpand(props) {
       .put(
         `https://test-app-backend09.herokuapp.com/app/main/${props.post._id}`,
         {
-          comment: { comment: newComment },
+          comment: newComment,
         }
       )
       .then(
@@ -36,7 +38,8 @@ function PostExpand(props) {
           onClose();
         },
         error => {
-          console.log(error.response.data);
+          setError(true);
+          setErrorMessage(error.response.data);
         }
       );
   };
@@ -100,6 +103,11 @@ function PostExpand(props) {
           placeholder="New Comment Text"
         />
       </div>
+      {error ? (
+        <div className="flex items-start justify-center w-4/5 px-1 mx-1">
+          <p className="text-red-600 text-xs font-normal">{errorMessage}</p>
+        </div>
+      ) : null}
       <div className="flex w-4/5 h-10 mt-1 mb-5">
         <button
           className="w-full border-2 border-gray-500 rounded bg-black text-white font-semibold text-base"

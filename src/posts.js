@@ -6,7 +6,7 @@ export const getPosts = createAsyncThunk('posts/getPosts', async () => {
   const { data } = await axios.get(
     `https://test-app-backend09.herokuapp.com/app/main/`
   );
-  console.log(data);
+  console.log('getPosts');
   return data;
 });
 
