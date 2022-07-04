@@ -11,10 +11,19 @@ function Dashboard(props) {
   const [createPost, setCreatePost] = useState(false);
   const [postFocused, setPostFocused] = useState(false);
   const [focusedPost, setFocusedPost] = useState({});
+  const [filter, setFilter] = useState(false);
   const posts = useSelector(state => state.posts.posts);
 
   const onCreatePost = () => {
     setCreatePost(true);
+  };
+
+  const filterPosts = () => {
+    if (filter) {
+      setFilter(false);
+    } else {
+      setFilter(true);
+    }
   };
 
   function onClose() {
@@ -46,18 +55,33 @@ function Dashboard(props) {
       {!createPost && !postFocused ? (
         <div>
           <div className="flex items-center justify-center mt-6">
-            <button
-              className="bg-sky-500 w-56 h-10 text-white font-medium text-base rounded"
-              onClick={onCreatePost}
-            >
-              Create New Post
-            </button>
+            <div className="flex items-center justify-center mt-6 mr-1">
+              <button
+                className="bg-sky-500 w-56 h-10 text-white font-medium text-base rounded"
+                onClick={onCreatePost}
+              >
+                Create New Post
+              </button>
+            </div>
+            <div className="flex items-center justify-center mt-6">
+              <button
+                className="bg-sky-500 w-16 h-10 text-white font-medium text-base rounded"
+                onClick={filterPosts}
+              >
+                filter
+              </button>
+            </div>
           </div>
+
           <div className="flex flex-col items-center justify-center mt-2">
             {Array.isArray(posts) && posts.length
               ? posts.map(post => (
                   <div className="flex p-2.5 " key={post._id}>
-                    <Post post={post} onClick={onComponentFocused} />
+                    {!filter ? (
+                      <Post post={post} onClick={onComponentFocused} />
+                    ) : post.comments.length ? (
+                      <Post post={post} onClick={onComponentFocused} />
+                    ) : null}
                   </div>
                 ))
               : null}
